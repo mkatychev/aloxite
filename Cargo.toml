@@ -1,0 +1,6 @@
+[package]
+name = "start_end_regex"
+version = "0.1.0"
+authors = ["Mikhail_Katychev <mkatych@gmail.com>"]
+
+[dependencies]
