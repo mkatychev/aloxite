@@ -24,24 +24,24 @@ impl Config {
             Some(arg) => arg,
             None => return Err("Didn't get a file name"),
         };
-        Ok(Config { start, stop, filename })
+        Ok(Config {
+            start,
+            stop,
+            filename,
+        })
     }
 }
 
 fn start_stop(start: &str, stop: &str, item: &str, beacon: &mut bool) -> bool {
-    if *beacon == false {
-        match item {
-            start => {
-                // The beacon of Amun Din has been lit!
-                *beacon = true;
-                return false;
-            },
-            stop => {
-                *beacon = false;
-                return false;
-            },
-            _ => return true,
+    if beacon == &false {
+        if item == start {
+            // The beacon of Amun Din has been lit!
+            *beacon = true;
         }
+            return false;
+    } else if item == stop {
+        *beacon = false;
+        return false;
     }
     return true;
 }
@@ -67,7 +67,7 @@ pub fn search<'a>(start: &str, stop: &str, contents: &'a str) -> Vec<&'a str> {
 }
 
 #[cfg(test)]
-mod test {
+mod tests {
     use super::*;
     #[test]
     fn one_result() {
