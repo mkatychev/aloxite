@@ -1,0 +1,10 @@
+{
+    "a_dir": {
+        "start": ["mf:entries", "("],
+            "stop": ";"
+    },
+    "b_dir": {
+        "start": ["mf:entries", "("],
+            "stop": ";"
+    }
+}

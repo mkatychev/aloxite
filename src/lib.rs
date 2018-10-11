@@ -1,3 +1,6 @@
+extern crate itertools;
+
+use itertools::Itertools;
 use std::env;
 use std::error::Error;
 use std::fs::File;
@@ -32,20 +35,6 @@ impl Config {
     }
 }
 
-fn start_stop(start: &str, stop: &str, item: &str, beacon: &mut bool) -> bool {
-    if beacon == &false {
-        if item == start {
-            // The beacon of Amun Din has been lit!
-            *beacon = true;
-        }
-            return false;
-    } else if item == stop {
-        *beacon = false;
-        return false;
-    }
-    return true;
-}
-
 pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
     let mut f = File::open(config.filename)?;
     let mut contents = String::new();
@@ -58,12 +47,44 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
-pub fn search<'a>(start: &str, stop: &str, contents: &'a str) -> Vec<&'a str> {
-    let mut beacon: bool = false;
+struct Beacon {
+    start: &[str],
+    stop: &[str],
+    longest: usize,
+}
+
+//impl Beacon {
+//fn new(coll: T)
+//}
+
+fn start_stop(item: &str, beacon: &mut Beacon) -> bool {
+    fn st_compare(item: &str, st_iter: &Iterator, is_active: &mut bool) -> bool {
+        let st_item = *st_iter.next();
+        match st_item {
+            None => {
+                // if st_iter is exhausted then start/stop item collection
+                *is_active = *is_active ^ true;
+            }
+            Some(i) => {
+                // if items do not match, reset iterator
+                if st_item != Some(item) {
+                    reset(st_iter);
+                }
+            }
+        }
+        return *is_active; // start/stop collection with this item
+    }
+
+    match beacon.active {
+        false => st_compare(item, beacon.start, beacon.active),
+        true => st_compare(item, beacon.stop, beacon.active),
+    }
+}
+
+pub fn search<'a>(beacon: Beacon, contents: &'a str) -> Vec<&'a str> {
+    //fn remingon(
     let split = contents.lines().flat_map(|line| line.split_whitespace());
-    split
-        .filter(|x| start_stop(start, stop, x, &mut beacon))
-        .collect()
+    let mut by_longest = split.batching(|it| Some(it.take(longest).map(|x| *x).collect::<Vec<&str>>()));
 }
 
 #[cfg(test)]
