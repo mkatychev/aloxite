@@ -48,14 +48,25 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
 }
 
 struct Beacon {
-    start: &[str],
-    stop: &[str],
+    start: Resettable,
+    stop: Resettable,
     longest: usize,
 }
 
-//impl Beacon {
-//fn new(coll: T)
-//}
+#[derive(Default)]
+struct Resettable {
+    string: &[str],
+    iter: Iterator,
+}
+
+impl Resettable {
+    fn default() -> Resettable {
+        Resettable::iter
+    }
+    fn reset(&mut self) {
+        self.iter = string.into_iter();
+    }
+}
 
 fn start_stop(item: &str, beacon: &mut Beacon) -> bool {
     fn st_compare(item: &str, st_iter: &Iterator, is_active: &mut bool) -> bool {
@@ -83,8 +94,10 @@ fn start_stop(item: &str, beacon: &mut Beacon) -> bool {
 
 pub fn search<'a>(beacon: Beacon, contents: &'a str) -> Vec<&'a str> {
     //fn remingon(
-    let split = contents.lines().flat_map(|line| line.split_whitespace());
-    let mut by_longest = split.batching(|it| Some(it.take(longest).map(|x| *x).collect::<Vec<&str>>()));
+    let split = contents
+        .lines()
+        .flat_map(|line| line.split_whitespace())
+        .batching(|it| Some(it.take(longest).map(|x| *x).collect::<Vec<&str>>()));
 }
 
 #[cfg(test)]
