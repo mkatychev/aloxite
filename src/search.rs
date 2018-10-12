@@ -42,6 +42,30 @@ impl Beacon {
     }
 }
 
+pub fn start_stop(item: &str, beacon: &mut Beacon) -> bool {
+    pub fn st_compare(item: &char, st_iter: &mut Resettable, is_active: &mut bool) -> bool {
+        let st_item = *st_iter.next();
+        match st_item {
+            None => {
+                // if st_iter is exhausted then start/stop item collection
+                *is_active = *is_active ^ true;
+            }
+            Some(i) => {
+                // if items do not match, reset iterator
+                if st_item != Some(item) {
+                    st_iter.reset();
+                }
+            }
+        }
+        return *is_active; // start/stop collection with this item
+    }
+
+    match beacon.active {
+        false => st_compare(item, beacon.start, beacon.active),
+        true => st_compare(item, beacon.stop, beacon.active),
+    }
+}
+
 fn test() {
     let mut s = vec!["alox"].into_iter(); // simulate args passed through CLI
     assert_eq!("alox", s.next().unwrap());
