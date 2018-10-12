@@ -64,30 +64,8 @@ impl Beacon {
     }
 }
 
-struct Resettable {
-    arr: &[char],
-    pub iter: Iterator,
-}
-
-impl Resettable {
-    pub fn new(arr: &[char]) -> Resettable {
-        Resettable {
-            arr: arr,
-            iter: arr.clone().into_iter(),
-        }
-    }
-
-    pub fn reset(&mut self) {
-        self.iter = self.arr.into_iter();
-    }
-
-    pub fn next(&mut self) -> Iterator<Item=char> {
-        self.iter.next()
-    }
-}
-
 pub fn start_stop(item: &str, beacon: &mut Beacon) -> bool {
-    pub fn st_compare(item: &str, st_iter: &Iterator, is_active: &mut bool) -> bool {
+    pub fn st_compare(item: &char, st_iter: &mut Resettable, is_active: &mut bool) -> bool {
         let st_item = *st_iter.next();
         match st_item {
             None => {
@@ -97,7 +75,7 @@ pub fn start_stop(item: &str, beacon: &mut Beacon) -> bool {
             Some(i) => {
                 // if items do not match, reset iterator
                 if st_item != Some(item) {
-                    reset(st_iter);
+                    st_iter.reset();
                 }
             }
         }
