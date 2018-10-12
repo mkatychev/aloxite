@@ -47,29 +47,48 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
     Ok(())
 }
 
-struct Beacon {
-    start: Resettable,
-    stop: Resettable,
-    longest: usize,
+pub struct Beacon {
+   pub start: Resettable,
+   pub stop: Resettable,
+   pub longest: usize,
+   pub active: bool,
 }
 
-#[derive(Default)]
+impl Beacon {
+    pub fn new(start: &[char], stop: &[char]) -> Beacon {
+        pub start: Resettable::new(start),
+        pub stop: Resettable::new(stop),
+        longest: match start.len() > stop.len() {
+            true => start.len(),
+            false => stop.len(),
+        }
+    }
+}
+
 struct Resettable {
-    string: &[str],
-    iter: Iterator,
+    arr: &[char],
+    pub iter: Iterator,
 }
 
 impl Resettable {
-    fn default() -> Resettable {
-        Resettable::iter
+    pub fn new(arr: &[char]) -> {
+        Resettable {
+            arr: arr,
+            iter: arr.clone().into_iter(),
+        }
     }
-    fn reset(&mut self) {
-        self.iter = string.into_iter();
+
+    pub fn reset(&mut self) {
+        self.iter = arr.into_iter();
+    }
+
+    pub fn next(&mut self) -> {
+        self.iter.next()
     }
 }
 
-fn start_stop(item: &str, beacon: &mut Beacon) -> bool {
-    fn st_compare(item: &str, st_iter: &Iterator, is_active: &mut bool) -> bool {
+pub fn start_stop(item: &str, beacon: &mut Beacon) -> bool {
+    pub fn st_compare(item: &str, st_iter: &Iterator, is_active: &mut bool) -> bool {
         let st_item = *st_iter.next();
         match st_item {
             None => {
@@ -95,9 +114,9 @@ fn start_stop(item: &str, beacon: &mut Beacon) -> bool {
 pub fn search<'a>(beacon: Beacon, contents: &'a str) -> Vec<&'a str> {
     //fn remingon(
     let split = contents
-        .lines()
-        .flat_map(|line| line.split_whitespace())
-        .batching(|it| Some(it.take(longest).map(|x| *x).collect::<Vec<&str>>()));
+        .chars()
+        //.flat_map(|line| line.split_whitespace())
+        //.batching(|it| Some(it.take(longest).map(|x| *x).collect::<Vec<&str>>()));
 }
 
 #[cfg(test)]
