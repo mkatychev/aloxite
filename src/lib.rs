@@ -1,6 +1,3 @@
-extern crate itertools;
-
-use itertools::Itertools;
 use std::env;
 use std::error::Error;
 use std::fs::File;
@@ -48,19 +45,21 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
 }
 
 pub struct Beacon {
-   pub start: Resettable,
-   pub stop: Resettable,
-   pub longest: usize,
-   pub active: bool,
+    pub start: Resettable,
+    pub stop: Resettable,
+    pub longest: usize,
+    pub active: bool,
 }
 
 impl Beacon {
     pub fn new(start: &[char], stop: &[char]) -> Beacon {
-        pub start: Resettable::new(start),
-        pub stop: Resettable::new(stop),
-        longest: match start.len() > stop.len() {
-            true => start.len(),
-            false => stop.len(),
+        Beacon {
+            start: Resettable::new(start),
+            stop: Resettable::new(stop),
+            longest: match start.len() > stop.len() {
+                true => start.len(),
+                false => stop.len(),
+            },
         }
     }
 }
@@ -71,7 +70,7 @@ struct Resettable {
 }
 
 impl Resettable {
-    pub fn new(arr: &[char]) -> {
+    pub fn new(arr: &[char]) -> Resettable {
         Resettable {
             arr: arr,
             iter: arr.clone().into_iter(),
@@ -79,10 +78,10 @@ impl Resettable {
     }
 
     pub fn reset(&mut self) {
-        self.iter = arr.into_iter();
+        self.iter = self.arr.into_iter();
     }
 
-    pub fn next(&mut self) -> {
+    pub fn next(&mut self) -> Iterator<Item=char> {
         self.iter.next()
     }
 }
@@ -113,10 +112,9 @@ pub fn start_stop(item: &str, beacon: &mut Beacon) -> bool {
 
 pub fn search<'a>(beacon: Beacon, contents: &'a str) -> Vec<&'a str> {
     //fn remingon(
-    let split = contents
-        .chars()
-        //.flat_map(|line| line.split_whitespace())
-        //.batching(|it| Some(it.take(longest).map(|x| *x).collect::<Vec<&str>>()));
+    let split = contents.chars();
+    //.flat_map(|line| line.split_whitespace())
+    //.batching(|it| Some(it.take(longest).map(|x| *x).collect::<Vec<&str>>()));
 }
 
 #[cfg(test)]
