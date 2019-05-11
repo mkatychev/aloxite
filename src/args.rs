@@ -1,10 +1,7 @@
-extern crate argparse;
-
 use argparse::{ArgumentParser, Store, StoreTrue}; // TODO replace with clap-rs
 
 fn parse_args() {
     let mut verbose = false;
-    let mut rules = [];
     {
         let mut ap = ArgumentParser::new();
         ap.set_description("aloxite cli");

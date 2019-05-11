@@ -1,7 +1,12 @@
+extern crate argparse;
+
 use std::env;
 use std::error::Error;
 use std::fs::File;
 use std::io::prelude::*;
+
+mod args;
+mod search;
 
 pub struct Config {
     pub start: String,
@@ -32,38 +37,17 @@ impl Config {
     }
 }
 
-pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
-    let mut f = File::open(config.filename)?;
+pub fn run(config: Config) -> Result<(), &'static str> {
+    let mut f = File::open(config.filename)
+                    .map_err(|e| "Problem opening file")?;
     let mut contents = String::new();
-    f.read_to_string(&mut contents)?;
+    f.read_to_string(&mut contents)
+        .map_err(|e| "Problem reading file")?;
     // conditional binding
-    let results = search(&config.start, &config.stop, &contents);
+    let mut beacon = search::Beacon::new(&config.start, &config.stop)?;
+    let results = search::search(&mut beacon, &contents);
     for line in results {
         println!("{}", line);
     }
     Ok(())
-}
-
-
-pub fn search<'a>(beacon: Beacon, contents: &'a str) -> Vec<&'a str> {
-    //fn remingon(
-    let split = contents.chars();
-    //.flat_map(|line| line.split_whitespace())
-    //.batching(|it| Some(it.take(longest).map(|x| *x).collect::<Vec<&str>>()));
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    #[test]
-    fn one_result() {
-        let contents = "\
-Rust:
-safe fast productive
-Pick all three.";
-        assert_eq!(
-            vec!["fast", "productive", "Pick"],
-            search("safe", "all", contents)
-        );
-    }
 }

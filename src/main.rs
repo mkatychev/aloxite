@@ -3,7 +3,7 @@ extern crate aloxite;
 use std::env;
 use std::process;
 
-use Config;
+use aloxite::{Config};
 
 fn main() {
     let config = Config::new(env::args()).unwrap_or_else(|err| {
